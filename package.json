@@ -1,0 +1,17 @@
+{
+  "name": "bot-get-product-shopee",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://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@github.com/Manusiabodoh4/bot-get-product-shopee.git",
+  "author": "Manusiabodoh4 <technoboth@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "joi": "^17.6.0",
+    "mongoose": "^6.2.3",
+    "puppeteer": "^13.4.0",
+    "puppeteer-extra": "^3.2.3",
+    "puppeteer-extra-plugin-stealth": "^2.9.0"
+  }
+}
