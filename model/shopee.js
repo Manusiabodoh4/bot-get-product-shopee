@@ -3,22 +3,14 @@ const { Schema } = require('mongoose')
 const Shopee = new Schema({
 
   toko : {
-    nama : String,
-    mengikuti : String,
-    peforma : String,
-    pengikut : String,
-    penilaian : String,
-    bergabung : String
+    nama : String,    
   },
-  produk : {
-    total : String,
-    finalTotal : Number,
+  produk : { 
+    total : Number,
     detail : [
       {
         link : String,
-        nama : String,
-        penilaian : String,
-        terjual : String,
+        nama : String,                
         varian : [
           {
             nama : String,

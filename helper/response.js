@@ -26,10 +26,13 @@ const responseValidator = (req, res, next, error, value) => {
   if(error === null || typeof error === "undefined"){
     req.valid = value
     next()
+    return
   }
 
-  templateResponse.data = error
+  console.log(error)
+  
   templateResponse.message = "Terdapat kesalahan pada format pengiriman (Request)"
+  templateResponse.data = error?.details[0]?.message
 
   res.status(400).json(templateResponse)
   res.end()

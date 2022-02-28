@@ -1,7 +1,7 @@
 const joi = require('joi')
 const { responseValidator } = require("../helper/response")
 
-const validatorProdAll = (req, res, next) => {
+const validatorProdAll = (req, res, next) => {  
 
   const schema = joi.object().keys({
     toko : joi.object().keys({
@@ -18,7 +18,7 @@ const validatorProdAll = (req, res, next) => {
     })
   })
 
-  const {error,value} = schema.validate(req?.body)
+  const {error,value} = schema.validate(req?.body)  
 
   responseValidator(req, res, next, error, value)
 

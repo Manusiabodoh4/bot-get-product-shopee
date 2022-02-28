@@ -6,7 +6,7 @@
   "author": "Manusiabodoh4 <technoboth@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -16,5 +16,8 @@
     "puppeteer": "^13.4.0",
     "puppeteer-extra": "^3.2.3",
     "puppeteer-extra-plugin-stealth": "^2.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
