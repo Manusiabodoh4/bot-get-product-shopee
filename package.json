@@ -5,6 +5,9 @@
   "repository": "https://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@github.com/Manusiabodoh4/bot-get-product-shopee.git",
   "author": "Manusiabodoh4 <technoboth@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.3",
