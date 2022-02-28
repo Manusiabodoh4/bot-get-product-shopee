@@ -14,6 +14,8 @@ const run = async () => {
 
   await browser.close()
 
+  DataStatic.browserWsEndpoint = ""
+
   return
 
 }
