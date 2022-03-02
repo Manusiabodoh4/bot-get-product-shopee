@@ -26,18 +26,30 @@ app.post("/prod/a", validatorProdAll ,async (req, res)=>{
     produk : []
   }
 
+  let status = true
+
   for(let i=0;i<leng;i++){
     
     URL = makeShopeeURL(toko?.nama, i, produk?.filter)    
     
     data = await prodAll.run(URL)
 
+    if(data === null){
+      status = false
+      break
+    }
+
     tempateResponse.total = tempateResponse.total + data.total
     tempateResponse.produk = tempateResponse.produk.concat(data.produk)
 
   }  
 
-  response(res, 200, "Testing", tempateResponse)
+  if(status){
+    response(res, 200, "Success get data", tempateResponse)      
+    return
+  }
+
+  response(res, 500, "System failed run, please re run execution", null)
 
 })
 
