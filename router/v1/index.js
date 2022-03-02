@@ -6,10 +6,11 @@ const close = require("../../browser/close")
 const { response } = require('../../helper/response')
 const { makeShopeeURL } = require('../../helper/url')
 const { validatorProdAll, validatorProdDetailAll } = require('../../middleware/joi')
+const { insertDataProduct } = require('../../controller')
 
 const app = express.Router()
 
-app.post("/prod/a", validatorProdAll ,async (req, res)=>{
+app.post("/prod/a", validatorProdAll , async (req, res)=>{
 
   const {toko, produk} = req?.valid  
   
@@ -43,6 +44,8 @@ app.post("/prod/a", validatorProdAll ,async (req, res)=>{
     tempateResponse.produk = tempateResponse.produk.concat(data.produk)
 
   }  
+
+  await insertDataProduct(toko?.nama, tempateResponse.total, tempateResponse.produk)
 
   if(status){
     console.log("*===== SELESAI =====*")

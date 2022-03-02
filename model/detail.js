@@ -1,4 +1,4 @@
-const { Schema } = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const Detail = new Schema({
   id : {type:String, required:true},
@@ -14,5 +14,5 @@ const Detail = new Schema({
   ]
 }, {timestamps:true})
 
-module.exports = mongo.model("detail", Detail)
+module.exports = model("Detail", Detail)
 

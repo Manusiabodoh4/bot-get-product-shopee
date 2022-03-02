@@ -1,4 +1,4 @@
-const { Schema } = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const Product = new Schema({
   shop : {
@@ -17,5 +17,5 @@ const Product = new Schema({
 
 }, {timestamps:true})
 
-module.exports = mongo.model("product", Product)
+module.exports = model("Product", Product)
 
