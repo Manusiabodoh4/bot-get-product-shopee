@@ -45,6 +45,7 @@ app.post("/prod/a", validatorProdAll ,async (req, res)=>{
   }  
 
   if(status){
+    console.log("*===== SELESAI =====*")
     response(res, 200, "Success get data", tempateResponse)      
     return
   }

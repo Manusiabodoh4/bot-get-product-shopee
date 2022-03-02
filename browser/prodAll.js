@@ -1,5 +1,6 @@
 const pup = require('puppeteer-extra').default
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+
 const DataStatic = require('../helper/data')
 const { delay } = require('../helper/delay')
 
@@ -52,7 +53,7 @@ const run = async (url) => {
     const childrenElementListProduct = await elementListProduct[0].getProperty('children')
     const lengElementListProduct = await (await childrenElementListProduct.getProperty("length")).jsonValue()
 
-    console.log("Banyak Data : "+lengElementListProduct)
+    console.log("Read data : "+lengElementListProduct+" pcs -> ("+url+")")
 
     let link = ""  
     let name = ""  
@@ -76,7 +77,7 @@ const run = async (url) => {
 
       templateObjectReturn.produk.push(templateObject)
 
-    }   
+    }       
 
     return templateObjectReturn
 
