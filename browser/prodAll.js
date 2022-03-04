@@ -40,13 +40,32 @@ const run = async (url) => {
 
     DataStatic.browserWsEndpoint =  browser.wsEndpoint()
 
-    const pages = await browser.pages()
+    const pages = await browser.pages()    
 
     const page = pages[0]  
 
-    await page.goto(url, {waitUntil:"domcontentloaded", timeout:0});        
+    await page.goto(url, {waitUntil:"load", timeout:0});              
 
-    await delay(10000)  
+    await delay(10000)
+
+    //scroll with iteration delay
+    await page.evaluate( async () => {      
+      let scrollPosition = 0
+      let documentHeight = document.body.scrollHeight
+
+      const iteration = 350
+
+      while (documentHeight > scrollPosition) {
+        window.scrollBy(0, iteration)
+        await new Promise(resolve => {
+          setTimeout(resolve, 1000)
+        })
+        scrollPosition = scrollPosition + iteration        
+      }      
+      return true
+    });    
+
+    await delay(1000)        
 
     //get length list product  
     const elementListProduct = await page.$x(`//div[contains(@class, 'shop-search-result-view')]/div[1]`)  
@@ -57,31 +76,39 @@ const run = async (url) => {
 
     let link = ""  
     let name = ""  
+    let image = ""
 
     const templateObjectReturn = {
       total : lengElementListProduct,
       produk : []
     }
 
-    for(let i=1;i<=lengElementListProduct;i++){
+    for(let i=1;i<=lengElementListProduct;i++){      
       
       const itemProduct = await page.$x(`//div[contains(@class, 'shop-search-result-view')]/div[1]/div[${i}]/a`)        
       const itemName = await page.$x(`//div[contains(@class, 'shop-search-result-view')]/div[1]/div[${i}]/a/div/div/div[2]/div[1]/div[1]/div`)         
 
+      const itemImage = await page.$x(`//div[contains(@class, 'shop-search-result-view')]/div[1]/div[${i}]/a/div/div/div[1]/img`)            
+
+      image = await itemImage[0].evaluate((element)=>{
+        return element.getAttribute("src")
+      })            
+
       link = await (await itemProduct[0].getProperty("href")).jsonValue()            
-      name = await (await itemName[0].getProperty("textContent")).jsonValue()    
+      name = await (await itemName[0].getProperty("textContent")).jsonValue()          
 
       const templateObject = {
-        link, name
+        link, name, image
       }
 
-      templateObjectReturn.produk.push(templateObject)
+      templateObjectReturn.produk.push(templateObject)      
 
     }       
 
     return templateObjectReturn
 
   } catch (error) {
+    console.log(error)
     return null    
   }
 

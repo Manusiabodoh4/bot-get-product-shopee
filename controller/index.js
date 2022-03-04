@@ -1,5 +1,8 @@
 const Product = require("../model/product")
-const { v4 } =  require('uuid');
+
+const getDataWithShopName = async (name) => {
+  return await Product.find({shop:{name:name}})    
+}
 
 const insertDataProduct = async (name, total, product) => {
 
@@ -13,19 +16,12 @@ const insertDataProduct = async (name, total, product) => {
 
   try {
 
-    const dataProduct = await Product.find({shop:{name:name}})    
+    const dataProduct = await getDataWithShopName(name)
 
     if(dataProduct.length !== 0){      
       // schema with checking data before and after
       if(dataProduct[0]?.product?.total === total) return false            
-    }
-   
-    const leng = product?.length
-
-    for(let i=0;i<leng;i++){      
-      const id = v4()
-      product[i].id = id      
-    }
+    }    
 
     const objectProduct = new Product({
       shop : {
@@ -51,5 +47,6 @@ const insertDataProduct = async (name, total, product) => {
 }
 
 module.exports = {
-  insertDataProduct
+  insertDataProduct,
+  getDataWithShopName
 }
