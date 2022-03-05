@@ -16,12 +16,7 @@ const insertDataProduct = async (name, total, product) => {
 
   try {
 
-    const dataProduct = await getDataWithShopName(name)
-
-    if(dataProduct.length !== 0){      
-      // schema with checking data before and after
-      if(dataProduct[0]?.product?.total === total) return false            
-    }    
+    await Product.deleteOne({shop:{name:name}})
 
     const objectProduct = new Product({
       shop : {

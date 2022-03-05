@@ -7,17 +7,17 @@ const Product = new Schema({
   product : {     
     total : {type:Number, required:true},
     detail : [
-      {       
-        image : {type:String, required:true} ,
+      {               
         link : {type:String, required:true},
         name : {type:String, required:true},                        
-        price : String,
-        image : String,
+        status:{type:Boolean, required:true},
+        price : String,        
         totalVarian : Number,
         varian : [
           {
             name : String,
-            price : String,            
+            price : String,   
+            image : String         
           }
         ],
         media : [

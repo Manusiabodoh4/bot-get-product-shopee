@@ -29,12 +29,17 @@ app.post("/prod/a", validatorProdAll , async (req, res)=>{
   }
 
   let status = true
+  let isLast = false
 
   for(let i=0;i<leng;i++){
     
     URL = makeShopeeURL(toko?.nama, i, produk?.filter)    
     
-    data = await prodAll.run(URL)
+    if(i === (leng-1)){
+      isLast = true
+    }
+
+    data = await prodAll.run(URL, isLast)
 
     if(data === null){
       status = false
