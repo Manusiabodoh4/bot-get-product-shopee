@@ -8,28 +8,25 @@ const { response } = require('../../helper/response')
 const { makeShopeeURL } = require('../../helper/url')
 const { validatorProdAll, validatorProdDetailAll } = require('../../middleware/joi')
 const { insertDataProduct, getDataWithShopName } = require('../../controller')
+const ConnectionNode = require('../../lib/node/connection')
 
 const app = express.Router()
 
 app.post("/prod/a", validatorProdAll , async (req, res)=>{
 
   const {toko, produk} = req?.valid  
-  
+
   const leng = produk?.total    
-
-  let URL = ""
-
-  URL = makeShopeeURL(toko?.nama, 0, produk?.filter)
-
+  let URL = ""  
   let data = null
-
   const tempateResponse = {
     total : 0,
     produk : []
   }
-
   let status = true
   let isLast = false
+  
+  const tree = await ConnectionNode.createConnection()
 
   for(let i=0;i<leng;i++){
     
@@ -39,7 +36,7 @@ app.post("/prod/a", validatorProdAll , async (req, res)=>{
       isLast = true
     }
 
-    data = await prodAll.run(URL, isLast)
+    data = await prodAll.run(URL, isLast, tree)
 
     if(data === null){
       status = false

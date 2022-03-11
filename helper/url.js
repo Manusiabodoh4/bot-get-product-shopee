@@ -26,7 +26,7 @@ const makeShopeeURL = (toko,page,filter) => {
       break;
   }
 
-  return URL
+  return URL+"#product_list"
 
 }
 

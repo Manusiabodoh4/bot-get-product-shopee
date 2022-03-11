@@ -10,7 +10,8 @@ const Product = new Schema({
       {               
         link : {type:String, required:true},
         name : {type:String, required:true},                        
-        status:{type:Boolean, required:true},
+        isReady:{type:Boolean, required:true},
+        isNewProduct:Boolean,
         price : String,        
         totalVarian : Number,
         varian : [

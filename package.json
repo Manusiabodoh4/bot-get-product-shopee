@@ -6,7 +6,8 @@
   "author": "Manusiabodoh4 <technoboth@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "testing":"node ./lib/usage.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

@@ -3,19 +3,20 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 
 const DataStatic = require('../helper/data')
 const { delay } = require('../helper/delay')
+const { BinarySearchTree } = require('../lib/node')
 
 pup.use(StealthPlugin())
 
 let browser = null
 
-const run = async (url, isLast) => {  
+const run = async (url, isLast, tree = BinarySearchTree) => {  
   
   isLast = (isLast||false)  
 
   try {  
     if(DataStatic.browserWsEndpoint.length === 0 || browser === null){    
       browser = await pup.launch({
-        headless: false,         
+        headless: true,         
         ignoreHTTPSErrors: true,     
         args : [      
           "--no-sandbox",
@@ -52,7 +53,7 @@ const run = async (url, isLast) => {
 
     const page = pages[0]      
 
-    await page.goto(url, {waitUntil:"domcontentloaded", timeout:0});              
+    await page.goto(url, {waitUntil:"domcontentloaded", timeout:0});                  
     
     await page.waitForXPath("//div[contains(@class, 'shop-search-result-view')]")    
 
@@ -78,15 +79,33 @@ const run = async (url, isLast) => {
 
     //get length list product  
     const elementListProduct = await page.$x(`//div[contains(@class, 'shop-search-result-view')]/div[1]`)         
-    const childrenElementListProduct = await elementListProduct[0].getProperty('children')
-    const lengElementListProduct = await (await childrenElementListProduct.getProperty("length")).jsonValue()
+    const childrenElementListProduct = await elementListProduct[0].getProperty('children')    
+
+    let lengElementListProduct = 0
+
+    //handling bad connection
+    while(true){      
+      lengElementListProduct = await (await childrenElementListProduct.getProperty("length")).jsonValue()
+      if(!isLast){
+        if(lengElementListProduct === 30){
+          break
+        }
+      }      
+      else{
+        if(lengElementListProduct !== 0){
+          break
+        }
+      }
+      console.log("waiting..")
+      await delay(1000)        
+    }
 
     console.log("Read data : "+lengElementListProduct+" pcs -> ("+url+")")
 
     let link = ""  
     let name = ""  
     // let image = ""
-    let status = true
+    let isReady = true
 
     const templateObjectReturn = {
       total : lengElementListProduct,
@@ -107,8 +126,10 @@ const run = async (url, isLast) => {
       link = await (await itemProduct[0].getProperty("href")).jsonValue()            
       name = await (await itemName[0].getProperty("textContent")).jsonValue()                
 
+      const isNewProduct = !tree.search(name)
+
       const templateObject = {
-        link, name, status
+        link, name, isReady, isNewProduct
       }
 
       templateObjectReturn.produk.push(templateObject)      
@@ -138,10 +159,12 @@ const run = async (url, isLast) => {
         link = await (await itemProduct[0].getProperty("href")).jsonValue()            
         name = await (await itemName[0].getProperty("textContent")).jsonValue()                
 
-        status = false
+        isReady = false
+
+        const isNewProduct = !tree.search(name)
 
         const templateObject = {
-          link, name, status
+          link, name, isReady, isNewProduct
         } 
 
         templateObjectReturn.produk.push(templateObject)              
