@@ -126,7 +126,20 @@ const run = async (url, isLast, tree = BinarySearchTree) => {
       link = await (await itemProduct[0].getProperty("href")).jsonValue()            
       name = await (await itemName[0].getProperty("textContent")).jsonValue()                
 
-      const isNewProduct = !tree.search(name)
+      const keySearch = tree.convertTextToNumber(name)  
+
+      let plusAddress = 0
+      let isNewProduct = false
+
+      while(true){
+        const tempSearch = tree.search(keySearch+plusAddress)
+        if(tempSearch.status && tempSearch.data?.name != name){
+          plusAddress += 10_000
+          continue
+        }
+        isNewProduct = !tempSearch.status
+        break
+      }            
 
       const templateObject = {
         link, name, isReady, isNewProduct
@@ -161,7 +174,20 @@ const run = async (url, isLast, tree = BinarySearchTree) => {
 
         isReady = false
 
-        const isNewProduct = !tree.search(name)
+        const keySearch = tree.convertTextToNumber(name)  
+
+        let plusAddress = 0
+        let isNewProduct = false
+
+        while(true){
+          const tempSearch = tree.search(keySearch+plusAddress)
+          if(tempSearch.status && tempSearch.data?.name != name){
+            plusAddress += 10_000
+            continue
+          }
+          isNewProduct = !tempSearch.status
+          break
+        }            
 
         const templateObject = {
           link, name, isReady, isNewProduct

@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon index.js",
-    "testing":"node ./lib/usage.js"
+    "testing":"node ./lib/node/usage.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

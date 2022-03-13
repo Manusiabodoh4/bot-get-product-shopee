@@ -26,7 +26,7 @@ app.post("/prod/a", validatorProdAll , async (req, res)=>{
   let status = true
   let isLast = false
   
-  const tree = await ConnectionNode.createConnection()
+  const tree = await ConnectionNode.createConnection(toko?.nama)
 
   for(let i=0;i<leng;i++){
     
@@ -34,7 +34,7 @@ app.post("/prod/a", validatorProdAll , async (req, res)=>{
     
     if(i === (leng-1)){
       isLast = true
-    }
+    }    
 
     data = await prodAll.run(URL, isLast, tree)
 
