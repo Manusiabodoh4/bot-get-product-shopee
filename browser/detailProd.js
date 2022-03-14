@@ -14,7 +14,7 @@ const run = async (url) => {
 
     if(DataStatic.browserWsEndpoint.length === 0 || browser === null){    
       browser = await pup.launch({
-        headless: false,         
+        headless: true,         
         ignoreHTTPSErrors: true,     
         args : [      
           "--no-sandbox",
@@ -34,7 +34,13 @@ const run = async (url) => {
       })          
     }else{        
       browser = await pup.connect({
-        browserWSEndpoint : DataStatic.browserWsEndpoint
+        browserWSEndpoint : DataStatic.browserWsEndpoint,
+        ignoreHTTPSErrors: true,                     
+        defaultViewport:{
+          width: 1366,
+          height: 768,
+          isLandscape : true
+        }
       })
     }
 
@@ -46,9 +52,10 @@ const run = async (url) => {
 
     await page.goto(url, {waitUntil:"domcontentloaded", timeout:0});        
 
-    await delay(10000)
+    await page.waitForXPath("//div[contains(@class, '2v0Hgx')]")    
+    await page.waitForXPath("//div[contains(@class, 'flex _3qYU_y _6Orsg5')]/div")        
 
-    console.log("Hello")
+    await delay(2000)    
 
     //get price product
     const priceProduct = await page.$x(`//div[contains(@class, '2v0Hgx')]`)    
@@ -59,7 +66,7 @@ const run = async (url) => {
     const childrenElementVarian = await varianProduct[0].getProperty('children')
     const lengElementVarian = await (await childrenElementVarian.getProperty("length")).jsonValue()
 
-    console.log("Read varian : "+lengElementVarian+" pcs -> ("+url+")")
+    console.log("Read varian : "+parseInt(lengElementVarian)-1+" pcs -> ("+url+")")
 
     const templateDetailProduct = {
       price :"",
@@ -84,27 +91,54 @@ const run = async (url) => {
         const obVarian = {
           name : "",
           price: "",
-          status : false
+          image:"",
+          isActive : false
         }
 
         const buttonVarian = await page.$x(`//div[contains(@class, 'flex _3qYU_y _6Orsg5')]/div/div[${i}]/div/button[${j}]`)
-        const textButtonVarian = await (await buttonVarian[0].getProperty("textContent")).jsonValue()
-        //const statusButtonVarian = await (await buttonVarian[0].getProperty("aria-disabled")).jsonValue()
+        const textButtonVarian = await (await buttonVarian[0].getProperty("textContent")).jsonValue()        
 
         const statusButtonVarian = await page.$x(`//div[contains(@class, 'flex _3qYU_y _6Orsg5')]/div/div[${i}]/div/button[${j}]/@aria-disabled`)
-        const status = await (await statusButtonVarian[0].getProperty("value")).jsonValue()        
+        const status = await (await statusButtonVarian[0].getProperty("value")).jsonValue()                
 
-        await buttonVarian[0].click()
+        await buttonVarian[0].click()        
 
-        await delay(1000)
+        await page.waitForXPath("//div[contains(@class, '_3rslob _1vc1W7')]")
+        
+        await delay(500)
 
-        const priceVarian = await (await priceProduct[0].getProperty("textContent")).jsonValue()
+        const priceProductVarian = await page.$x(`//div[contains(@class, '2v0Hgx')]`)
+        const priceVarian = await (await priceProductVarian[0].getProperty("textContent")).jsonValue()
+        const itemImage = await page.$x(`//div[contains(@class, '_3rslob _1vc1W7')]`)            
+
+        image = await itemImage[0].evaluate((element)=>{
+          return element.getAttribute("style")
+        })            
+        
+        let strImage = ""
+        let statusRenderChar = false
+
+        for(let v=0;v<image?.length;v++){
+          
+          const char = image.charAt(v)          
+          
+          if(char === '('){
+            statusRenderChar = true
+          }else if(char === ')'){
+            statusRenderChar = false            
+            break;
+          }
+
+          if(statusRenderChar){
+            strImage += char
+          }
+
+        }              
 
         obVarian.name = textButtonVarian
-        obVarian.status = !status
-        obVarian.price = priceVarian
-
-        console.log(obVarian)
+        obVarian.isActive = !(status === 'true')
+        obVarian.price = (!(status === 'true'))?priceVarian:'0'
+        obVarian.image = strImage.substring(2,strImage.length-1)
 
         templateDetailProduct.varian.push(obVarian)
 

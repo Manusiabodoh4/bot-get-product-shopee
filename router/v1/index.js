@@ -75,7 +75,7 @@ app.post("/prod/d/a", validatorProdDetailAll , async (req, res)=>{
 
   let status = true
 
-  //productDetail?.total
+  console.log(productDetail?.total);
 
   for(let i=0;i<1;i++){
     
