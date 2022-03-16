@@ -1,6 +1,37 @@
 const joi = require('joi')
 const { responseValidator } = require("../helper/response")
 
+const validatorNetProdAll = (req, res, next) => {
+
+  const schema = joi.object().keys({
+    toko : joi.object().keys({      
+      id : joi.number().required(),
+      name :  joi.string().required(),
+      totalPage : joi.number().required(),
+      totalSoldOut : joi.number().required()
+    })
+  })
+
+  const {error,value} = schema.validate(req?.body)  
+
+  responseValidator(req, res, next, error, value)
+
+}
+
+const validatorNetProdDetail = (req, res, next) => {
+
+  const schema = joi.object().keys({
+    toko : joi.object().keys({
+      id : joi.number().required(),      
+    })    
+  })
+
+  const {error,value} = schema.validate(req?.body)  
+
+  responseValidator(req, res, next, error, value)
+
+}
+
 const validatorProdAll = (req, res, next) => {  
 
   const schema = joi.object().keys({
@@ -40,5 +71,7 @@ const validatorProdDetailAll = (req, res, next) => {
 
 module.exports = {
   validatorProdAll,
-  validatorProdDetailAll
+  validatorProdDetailAll,
+  validatorNetProdAll,
+  validatorNetProdDetail
 }

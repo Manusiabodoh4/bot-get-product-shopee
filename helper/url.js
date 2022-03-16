@@ -30,6 +30,16 @@ const makeShopeeURL = (toko,page,filter) => {
 
 }
 
+const convertUrl = (name="", shopid, itemid) => {    
+  name = (name||"")
+  shopid  =(shopid||-1)
+  itemid = (itemid||-1)    
+  if(name === "" || shopid === -1 || itemid === -1) return ""
+  const generateName = name.replace("/(\s)/g","-")
+  return `https://shopee.co.id/${generateName}-i.${shopid}.${itemid}`
+}
+
 module.exports = {
-  makeShopeeURL
+  makeShopeeURL,
+  convertUrl
 }

@@ -6,12 +6,14 @@ const mongo = require("mongoose")
 const cors = require('cors')
 
 //versioning
-const v1 = require("./router/v1/index")
+const ve1 = require("./router/v1/engine/index")
+const vn1 = require("./router/v1/network/index")
 
 app.use(cors())
 app.use(express.json())
 
-app.use("/v1", v1)
+app.use("/v1/e", ve1)
+app.use("/v1/n", vn1)
 
 mongo.connect("mongodb://127.0.0.1:27017", {
   dbName:"Bot",

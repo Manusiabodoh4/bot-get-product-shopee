@@ -15,7 +15,7 @@ const run = async (url) => {
 
     if(DataStatic.browserWsEndpoint.length === 0 || browser === null){    
       browser = await pup.launch({
-        headless: true,         
+        headless: false,         
         ignoreHTTPSErrors: true,     
         args : [      
           "--no-sandbox",
@@ -155,7 +155,7 @@ const run = async (url) => {
     const lengListMediaImage = await (await childrenListMediaImage.getProperty("length")).jsonValue()
 
     for(let o=1;o<=lengListMediaImage;o++){
-      
+
       const itemMediaImage = await page.$x(`//div[contains(@class, '_1jTFGt')]/div[${o}]/div[1]/div`)
 
       if(o === 1){

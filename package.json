@@ -7,13 +7,15 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon index.js",
-    "testing":"node ./lib/node/usage.js"
+    "testing": "node ./lib/node/usage.js"
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "joi": "^17.6.0",
     "mongoose": "^6.2.3",
+    "node-fetch": "2",
     "puppeteer": "^13.4.0",
     "puppeteer-extra": "^3.2.3",
     "puppeteer-extra-plugin-stealth": "^2.9.0"

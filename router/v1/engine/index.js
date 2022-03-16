@@ -1,14 +1,14 @@
 const express = require('express')
 
-const prodAll = require('../../browser/prodAll')
-const detailProd = require('../../browser/detailProd')
-const close = require("../../browser/close")
+const prodAll = require('../../../browser/prodAll')
+const detailProd = require('../../../browser/detailProd')
+const close = require("../../../browser/close")
 
-const { response } = require('../../helper/response')
-const { makeShopeeURL } = require('../../helper/url')
-const { validatorProdAll, validatorProdDetailAll } = require('../../middleware/joi')
-const { insertDataProduct, getDataWithShopName, updateDataDetailProduct } = require('../../controller')
-const ConnectionNode = require('../../lib/node/connection')
+const { response } = require('../../../helper/response')
+const { makeShopeeURL } = require('../../../helper/url')
+const { validatorProdAll, validatorProdDetailAll } = require('../../../middleware/joi')
+const { insertDataProduct, getDataWithShopName, updateDataDetailProduct } = require('../../../controller/engine')
+const ConnectionNode = require('../../../lib/node/connection')
 
 const app = express.Router()
 
