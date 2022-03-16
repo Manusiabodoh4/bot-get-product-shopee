@@ -7,7 +7,7 @@ const close = require("../../browser/close")
 const { response } = require('../../helper/response')
 const { makeShopeeURL } = require('../../helper/url')
 const { validatorProdAll, validatorProdDetailAll } = require('../../middleware/joi')
-const { insertDataProduct, getDataWithShopName } = require('../../controller')
+const { insertDataProduct, getDataWithShopName, updateDataDetailProduct } = require('../../controller')
 const ConnectionNode = require('../../lib/node/connection')
 
 const app = express.Router()
@@ -48,9 +48,10 @@ app.post("/prod/a", validatorProdAll , async (req, res)=>{
 
   }  
 
-  await insertDataProduct(toko?.nama, tempateResponse.total, tempateResponse.produk)
-
   if(status){
+
+    await insertDataProduct(toko?.nama, tempateResponse.total, tempateResponse.produk)
+
     console.log("*===== SELESAI =====*")
     response(res, 200, "Success get data", tempateResponse)      
     return
@@ -71,29 +72,39 @@ app.post("/prod/d/a", validatorProdDetailAll , async (req, res)=>{
     return
   }
 
-  const productDetail = dataProduct[0]?.product    
+  const productDetail = dataProduct[0]?.product 
+  let productDetailItem = productDetail?.detail   
 
   let status = true
 
-  console.log(productDetail?.total);
+  console.log("Total : "+productDetail?.total)
 
-  for(let i=0;i<1;i++){
+  for(let i=0;i<productDetail?.total;i++){
     
-    // const url = productDetail?.detail[i]?.link
-    const url = "https://shopee.co.id/Fresh-Care-Aromatherapy-Roll-On-Minyak-Angin-FreshCare-Fresh-Care-Teens-Minyak-Angin-Minyak-Aromaterapi-TnT-Beauty-Shop-i.744873.6641331608?sp_atk=23781c03-db8c-4abc-8721-8d2dea112b58"
+    const url = productDetailItem[i]?.link
 
-    const data = await detailProd.run(url)
+    const data = await detailProd.run(url)    
+
+    productDetailItem[i].price = data?.price
+    productDetailItem[i].totalVarian = data?.totalVarian
+    productDetailItem[i].varian = data?.varian
+    productDetailItem[i]["media"] = data?.media    
 
     if(data === null){
       status = false
       break
     }    
 
+    console.log(`Progress Data : ${i+1}/${productDetail?.total}`)
+
   }
 
   if(status){
+
+    await updateDataDetailProduct(toko?.nama, productDetail?.total, productDetailItem)
+
     console.log("*===== SELESAI =====*")
-    response(res, 200, "Success get data", {})      
+    response(res, 200, "Success update detail product", productDetailItem)      
     return
   }
 

@@ -4,6 +4,24 @@ const getDataWithShopName = async (name) => {
   return await Product.find({shop:{name:name}})    
 }
 
+const updateDataDetailProduct = async (name = "", total = 0,detail = []) => {
+  if(name === "" || detail.length === 0 || total === 0) return false
+  
+  try {
+    
+    await Product.updateOne({shop:{name}}, {product:{total, detail}})
+
+    return true
+
+  } catch (error) {
+  
+    console.log(error)
+    return false
+
+  }
+
+}
+
 const insertDataProduct = async (name, total, product) => {
 
   name = (name||"")
@@ -43,5 +61,6 @@ const insertDataProduct = async (name, total, product) => {
 
 module.exports = {
   insertDataProduct,
-  getDataWithShopName
+  getDataWithShopName,
+  updateDataDetailProduct
 }
