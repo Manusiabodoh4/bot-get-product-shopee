@@ -39,7 +39,21 @@ const convertUrl = (name="", shopid, itemid) => {
   return `https://shopee.co.id/${generateName}-i.${shopid}.${itemid}`
 }
 
+const makeShopeeImageURL = (id) => {
+  id = (id|"")
+  if(id === "") return ""
+  return `https://cf.shopee.co.id/file/${id}`
+}
+
+const makeShopeeVideoURL = (id) => {
+  id = (id|"")
+  if(id === "") return ""
+  return `https://cvf.shopee.co.id/file/${id}`
+}
+
 module.exports = {
   makeShopeeURL,
-  convertUrl
+  convertUrl,
+  makeShopeeImageURL,
+  makeShopeeVideoURL
 }
