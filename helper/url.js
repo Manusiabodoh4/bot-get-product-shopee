@@ -35,9 +35,11 @@ const convertUrl = (name="", shopid, itemid) => {
   shopid  =(shopid||-1)
   itemid = (itemid||-1)    
   if(name === "" || shopid === -1 || itemid === -1) return ""
-  const generateName = name.replace("/(\s)/g","-")
+  const generateSpesialCharater = name.replace(/[^a-zA-Z ]/g, " ")
+  const generateName = generateSpesialCharater.replace(/ /g,"-")
   return `https://shopee.co.id/${generateName}-i.${shopid}.${itemid}`
 }
+
 
 const makeShopeeImageURL = (id) => {
   id = (id|"")

@@ -6,7 +6,8 @@ const ProductNet = new Schema({
   product:[
     {
       link:{type:String, required:true},
-      detail:{}
+      itemid:{type:Number, required:true},
+      isNewUpdate:{type:Boolean, required:true}
     }
   ]
 })
