@@ -69,9 +69,22 @@ const validatorProdDetailAll = (req, res, next) => {
 
 }
 
+const validatorUploadAdd  = (req, res, next) => {
+  
+  const schema = joi.object().keys({
+    shopid: joi.number().required()
+  })
+  
+  const {error, value} = schema.validate(req?.params)
+
+  responseValidator(req, res, next, error, value)
+
+}
+
 module.exports = {
   validatorProdAll,
   validatorProdDetailAll,
   validatorNetProdAll,
-  validatorNetProdDetail
+  validatorNetProdDetail,
+  validatorUploadAdd
 }
